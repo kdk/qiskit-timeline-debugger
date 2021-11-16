@@ -44,7 +44,7 @@ class PreviousPass:
         cls.circuit_prop_acc.children = []
 
 
-def name_callback(dag, pass_, time, property_set, count):
+def advanced_callback(dag, pass_, time, property_set, count):
 
     # write the image to qasm string
 
@@ -230,10 +230,102 @@ def name_callback(dag, pass_, time, property_set, count):
         display(new_acc)
 
 
-def basic_callback():
-    pass
+def basic_callback(dag, pass_, time, property_set, count):
 
-    # to-do : formatting difficult right now
+    # write the image to qasm string
+
+    # 1. No display is required, no visual approach
+    qasm_string = dag_to_circuit(dag).qasm().encode()
+    depth_entry = str(count) + "-" + str(dag.depth())
+
+    # 2. make file name
+    fname = str(count) + ".gz"
+    path = "debug-info/qasm/" + fname
+
+    # 3. save in the file
+    write_string(qasm_string, path)
+    write_depth(depth_entry + "\n")
+
+    pass_type = None
+
+    if pass_.is_analysis_pass:
+        pass_type = "A"
+        Overview.total_passes["A"] += 1
+    else:
+        pass_type = "T"
+        Overview.total_passes["T"] += 1
+
+    # make a box of properties
+    if pass_type == "A":
+        head = Headings.analyse_label_name(pass_.name())
+    else:
+        head = Headings.transform_label_name(pass_.name())
+
+    # change
+    time_taken = HTML(
+        r"<p style ='" + Styles.time_button + "'>  " + str(round(time, 5)) + " ms </p>",
+        layout=Layouts.button_layout1,
+    )
+
+    #     head_box = HBox([head], layout=Layouts.box_overview)
+
+    # update the overview panel
+    Overview.depths["final"] = dag.depth()
+    Overview.op_count["final"] = len(dag.op_nodes(include_directives=False))
+
+    props = [time_taken]
+
+    one_q_ops, two_q_ops = 0, 0
+
+    nodes = dag.op_nodes(include_directives=False)
+
+    for node in nodes:
+        if len(node.qargs) > 1:
+            two_q_ops += 1
+        else:
+            one_q_ops += 1
+
+    # 2. encapsulate BASIC circuit properties in Labels
+
+    dag_properties = {
+        "Width": dag.width(),
+        "Size": dag.size(),
+        "Depth": dag.depth(),
+        "1-Q ops": one_q_ops,
+        "2-Q ops": two_q_ops,
+    }
+
+    for prop, value in dag_properties.items():
+        style = Styles.same_value
+
+        if prop not in PreviousPass.circuit_props:
+            pass  # here, each pass will always have this
+        else:
+            if value != PreviousPass.circuit_props[prop]:
+                style = Styles.changed_value
+
+        props.append(
+            HTML(
+                r"<p style = '"
+                + style
+                + "'> "
+                + str(prop)
+                + " : "
+                + str(value)
+                + " </p>",
+                layout=Layouts.button_layout1,
+            )
+        )
+        PreviousPass.circuit_props[prop] = value
+
+    prop_box = HBox(children=props, layout=Layouts.box_layout_row)
+
+    new_pass = VBox(
+        [head, prop_box], layout=dict(display="flex", flex_flow="column", width="100%")
+    )
+
+    with main_view:
+        display(new_pass)
 
 
 class TreBugger:
@@ -261,28 +353,63 @@ class TreBugger:
 
     def __get_args_accordion(self, **kwargs):
 
-        # get the arguments that are set by the user
-        args = HBox(
-            layout=dict(display="flex", align_items="stretch", flex_flow="row wrap")
-        )
+        # make two boxes for each key and values
+        key_box = {}
+        val_box = {}
+        for i in range(2):
+            key_box[i] = VBox(layout=Layouts.box_kwargs)
 
-        children = []
-        for key, val in kwargs.items():
-            # for each key that has been set by the user
-            # make a button
-            if val is not None:
-                children.append(
-                    Button(
-                        description=key,
-                        layout=Layouts.button_layout2,
-                        style=Styles.button_style2,
-                        disabled=True,
-                    )
-                )
+            val_box[i] = VBox(layout=Layouts.box_kwargs)
 
-        args.children = children
+        # make children dicts
+        key_children = {0: [], 1: []}
+        value_children = {0: [], 1: []}
 
-        args_acc = Accordion([args], layout=dict(margin="2% 0% 2% 0%"))
+        # get the length
+        n = len(kwargs.items())
+
+        # counter
+        index = 0
+
+        for i, (key, val) in enumerate(kwargs.items()):
+            if val is None:
+                continue
+
+            # make key and value labels
+            key_label = HTML(
+                r"<p style = '" + Styles.key_style + "'><b> " + key + "</b></p>"
+            )
+
+            if get_size(val) < 2 ** 15:
+                value = val
+            else:
+                value = "Value too large"
+
+            value_label = HTML(
+                r"<p style = '" + Styles.value_style + "'>" + str(value) + "</p>"
+            )
+
+            # add to the list
+            key_children[index].append(key_label)
+            value_children[index].append(value_label)
+
+            # flip box id
+            index = 0 if i < n // 2 else 1
+
+        # construct the inner vertical boxes
+        for i in range(2):
+            key_box[i].children = key_children[i]
+            val_box[i].children = value_children[i]
+
+        # construct HBoxes
+        args_box1 = HBox([key_box[0], val_box[0]], layout={"width": "50%"})
+        args_box2 = HBox([key_box[1], val_box[1]], layout={"width": "50%"})
+
+        # construct final HBox
+        args_box = HBox([args_box1, args_box2])
+
+        # construct Accordion
+        args_acc = Accordion([args_box])
         args_acc.selected_index = None
         args_acc.set_title(0, "Params set for Transpiler")
 
@@ -362,6 +489,7 @@ class TreBugger:
         return overview
 
     def __make_description(self, backend, opt_level, **kwargs):
+
         backend_name = backend.name()
 
         # add the second child
@@ -422,8 +550,16 @@ class TreBugger:
         self.__debugger.selected_index = None
 
     def debug(
-        self, circuit, backend, optimization_level, debug_level, disp=True, **kwargs,
+        self,
+        circuit,
+        backend,
+        optimization_level,
+        debug_level,
+        seed=None,
+        disp=True,
+        **kwargs,
     ):
+
         self.__debugger = Accordion()
 
         self.__clear_view()
@@ -439,13 +575,14 @@ class TreBugger:
         if debug_level == "basic":
             callback = basic_callback
         else:
-            callback = name_callback
+            callback = advanced_callback
 
         transpile(
             circuit,
             backend=backend,
             optimization_level=optimization_level,
             callback=callback,
+            seed_transpiler=seed,
             **kwargs,
         )
 

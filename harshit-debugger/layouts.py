@@ -18,6 +18,11 @@ class Layouts:
         display="flex", flex_flow="column", align_items="stretch", width="100%"
     )
     box_layout_row = dict(display="flex", flex_flow="row", align_items="stretch")
+
+    box_kwargs = dict(
+        width="50%", display="flex", align_items="stretch", flex_flow="column"
+    )
+
     box_overview = dict(
         width="40%", display="flex", align_items="stretch", flex_flow="column"
     )
@@ -28,7 +33,7 @@ class Layouts:
 
     acc_layout = dict(width="80%", margin="1.5% 0 1.5% 3%")
 
-    acc_button = dict(width="auto", height="50px", display="center")
+    acc_button = dict(width="auto", height="45px", display="center")
 
     output_layout = dict(
         display="flex",
@@ -38,25 +43,41 @@ class Layouts:
         border="1px solid",
     )
 
-    button_layout1 = dict(width="100%", height="30px")
+    button_layout1 = dict(width="100%", height="auto")
     button_layout2 = dict(width="15%", height="40px")
 
 
 class Styles:
 
-    same_value = """  margin: 3% 3% 3% 3%;
-                    padding: 5px 5px 5px 5px;
-                    color: cornsilk;
+    same_value = """  margin: 1% 1% 1% 1%;
+                    padding: 10px 10px 10px 10px;
                     text-align: center;
-                    opacity: 0.75;
-                    background-color: #ca80e9; """
+                    border-left : 1px solid black;
+                    font-size : 1.1em; """
 
-    changed_value = """  margin: 3% 3% 3% 3%;
-                        padding: 5px 5px 5px 5px;
-                        color: cornsilk;
+    changed_value = """  margin: 1% 1% 1% 1%;
+                        padding: 10px 10px 10px 10px;
                         text-align: center;
-                        opacity: 0.75;
-                        background-color: #1e002a; """
+                        font-weight: bold;
+                        font-size : 1.1em;
+                        background : rgba(251, 191, 190, 0.4);
+                       """
+
+    key_style = """margin: 1% 1% 1% 1%;
+                padding: 5px 20px 5px 20px;
+                font-size: 1.1em;
+                color: cornsilk;         
+                background: rgba(15,23,229,0.7);"""
+
+    value_style = """margin: 1% 1% 1% 1%;
+                padding: 5px 20px 5px 20px;
+                border-left : 2px solid black;
+                font-size: 1.2em;"""
+
+    time_button = """margin: 1% 1% 1% 1%;
+                    padding: 10px 10px 10px 20px;
+                    font-size: 1.1em;
+                    background: rgba(211,191,229,0.4); """
 
     button_style1 = dict(font_weight="bold", button_color="beige")
 
@@ -88,26 +109,24 @@ class Styles:
                         font-size: 1.3em;
                         background-color: #b44de0; """
 
-    label_analyse_inner = """  margin:  3% 3% 3% 3%;
+    label_analyse_inner = """  margin: 1% 1% 1% 1%;
                         padding: 10px 10px 10px 10px;
                         color: cornsilk;
-                        text-align: center;
-                        font-size: 1.2em;
-                        background-color: #b44de0; """
+                        font-size: 1.3em;
+                        background: rgba(180, 77, 224, 0.7)"""
 
-    label_transform = """   margin-top : 10%;
+    label_transform = """margin-top : 10%;
                         margin-left : 5%;
                         color: cornsilk;
                         padding: 15px 15px 15px 15px;
                         font-size: 1.3em;
                         background-color: #1b047c;"""
 
-    label_transform_inner = """   margin:  3% 3% 3% 3%;
+    label_transform_inner = """   margin: 1% 1% 1% 1%;
                         color: cornsilk;
                         padding: 10px 10px 10px 10px;
-                        text-align: center;
-                        font-size: 1.2em;
-                        background-color: #1b047c;"""
+                        font-size: 1.3em;
+                        background: rgba(27, 4, 124, 0.7);"""
 
     label_text = " padding: 2px 2px 2px 2px; margin-left:10%; font-size: 1.1em;"
 
@@ -129,7 +148,7 @@ class Headings:
             + "'><b>  "
             + text
             + "  </b></p>",
-            layout=dict(width="auto"),
+            layout=dict(width="33%"),
         )
 
     def analyse_label_name(text):
@@ -139,7 +158,7 @@ class Headings:
             + "'><b>  "
             + text
             + "  </b></p> ",
-            layout=dict(width="auto"),
+            layout=dict(width="33%"),
         )
 
 
