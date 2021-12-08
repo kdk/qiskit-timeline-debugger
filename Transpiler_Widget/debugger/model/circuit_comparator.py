@@ -72,11 +72,11 @@ class CircuitComparator:
 
         fully_changed = len(id_set) == 0
 
-        # if not fully_changed:
-        for id2, l in enumerate(list(curr_dag.layers())):
-            if id2 not in id_set:
-                # this is not an LCS node -> highlight it
-                for node in l["graph"].front_layer():
-                    node.name = node.name + " "
+        if not fully_changed:
+            for id2, l in enumerate(list(curr_dag.layers())):
+                if id2 not in id_set:
+                    # this is not an LCS node -> highlight it
+                    for node in l["graph"].front_layer():
+                        node.name = node.name + " "
 
-        return dag_to_circuit(curr_dag)
+        return (fully_changed, dag_to_circuit(curr_dag))

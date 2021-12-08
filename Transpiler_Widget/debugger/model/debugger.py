@@ -23,7 +23,6 @@ class Debugger:
         circuit: QuantumCircuit,
         backend: Optional[Union[Backend, BaseBackend]] = None,
         optimization_level: Optional[int] = None,
-        disp=True,
         **kwargs
     ):
 
@@ -44,9 +43,9 @@ class Debugger:
         warnings.simplefilter("ignore")
         transpilation_sequence.general_info = {
             "Backend": backend.name(),
-            "Qiskit version": __qiskit_version__["qiskit"],
-            "Terra version": __qiskit_version__["qiskit-terra"],
             "optimization_level": optimization_level,
+            "Qiskit version": __qiskit_version__["qiskit"],
+            "Terra version": __qiskit_version__["qiskit-terra"]
         }
         warnings.simplefilter("default")
 
@@ -56,8 +55,8 @@ class Debugger:
         # Pass the model to the view:
         view.transpilation_sequence = transpilation_sequence
         view.update_params(**kwargs)
-        if disp:
-            display(view)
+
+        display(view)
 
         transpile(
             circuit,
@@ -68,6 +67,7 @@ class Debugger:
         )
 
         view.update_summary()
+        view.add_class('done')
 
     @classmethod
     def _register_logging_handler(cls, transpilation_sequence):
