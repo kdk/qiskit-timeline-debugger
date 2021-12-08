@@ -41,9 +41,9 @@ class TimelineView(widgets.VBox):
 
         # summary panel
         summary_heading = widgets.HTML(
-            "<h2 style = 'margin: 10px 20px 0 30px; '> Transpilation Overview</h2>"
+            "<h2 style = 'margin: 10px 20px 0 30px; font-weight: bold;'> Transpilation Overview</h2>"
         )
-        summary_panel = widgets.HBox(
+        summary_panel = widgets.VBox(
             [
                 summary_heading,
                 widgets.GridBox(
@@ -1174,12 +1174,17 @@ class TimelineView(widgets.VBox):
             .transpilation-step > :nth-child(3) { display: none; }
         }
 
-        @media (max-width:900px) {
+        @media (max-width:985px) {
+            .title h1 { font-size: 26px; }
+            .logo {margin : 0px 2px;}
             .transpilation-step { grid-template-columns: 35px auto 70px 70px 70px 70px; }
             .transpilation-step > :nth-child(6) { display: none; }
+
         }
 
         @media (max-width:800px) {
+            
+            
             .options { grid-template-columns: repeat(2, auto) !important; }
             .options > :nth-child(3) { display: none; }
 
@@ -1188,8 +1193,7 @@ class TimelineView(widgets.VBox):
         }
 
         @media (max-width:700px) {
-            .title h1 { font-size: 18px; }
-
+            
             .summary-panel { grid-template-columns: repeat(1, auto) !important; }
 
             .property-set { width: 100% !important; }
@@ -1204,7 +1208,9 @@ class TimelineView(widgets.VBox):
             .transpilation-step > :nth-child(5) { display: none; }
         }
 
-        @media (max-width:500px) {
+        @media (max-width:550px) {
+             .logo {display: none;}
+             .title {font-size : 14px;}
             .transpilation-step { grid-template-columns: 35px auto; }
             .transpilation-step > :nth-child(4) { display: none; }
             .transpilation-step > :nth-child(8) { display: none; }

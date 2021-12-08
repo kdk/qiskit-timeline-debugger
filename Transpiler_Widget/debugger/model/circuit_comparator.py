@@ -34,7 +34,7 @@ class CircuitComparator:
     @staticmethod
     def compare(prev_circ, curr_circ) -> QuantumCircuit:
         if prev_circ is None:
-            return curr_circ
+            return (False, curr_circ)
 
         # update by reference as there is no qasm now
         prev_dag = circuit_to_dag(prev_circ)
