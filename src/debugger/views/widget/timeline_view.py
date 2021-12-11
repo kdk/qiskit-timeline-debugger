@@ -1,5 +1,5 @@
 from numpy import disp
-from qiskit.converters import dag_to_circuit
+from qiskit.converters import dag_to_circuit, circuit_to_dag
 from qiskit.dagcircuit import DAGCircuit
 
 from collections import defaultdict
@@ -930,12 +930,21 @@ class TimelineView(widgets.VBox):
         else:
             idx = step.index
             # Due to a bug in DAGCircuit.__eq__, we can not use ``step.dag != None``
-            while not isinstance(
-                self.transpilation_sequence.steps[idx].dag, DAGCircuit
+
+            found_transform = False
+            while (
+                not isinstance(self.transpilation_sequence.steps[idx].dag, DAGCircuit)
+                and idx > 0
             ):
                 idx = idx - 1
-                if idx < 0:
-                    return None
+                if idx >= 0:
+                    found_transform = (
+                        self.transpilation_sequence.steps[idx].type
+                        == PassType.TRANSFORMATION
+                    )
+
+            if found_transform == False:
+                return circuit_to_dag(self.transpilation_sequence.original_circuit)
 
             return self.transpilation_sequence.steps[idx].dag
 
