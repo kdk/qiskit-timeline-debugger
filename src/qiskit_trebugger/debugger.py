@@ -9,10 +9,10 @@ import warnings
 
 from IPython.display import display
 
-from debugger.model import TranspilerLoggingHandler
-from debugger.model import TranspilerDataCollector
-from debugger.model import TranspilationSequence
-from debugger.views.widget.timeline_view import TimelineView
+from qiskit_trebugger.model import TranspilerLoggingHandler
+from qiskit_trebugger.model import TranspilerDataCollector
+from qiskit_trebugger.model import TranspilationSequence
+from qiskit_trebugger.views.widget.timeline_view import TimelineView
 from .debugger_error import DebuggerError
 
 

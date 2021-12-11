@@ -1019,14 +1019,14 @@ class TimelineView(widgets.VBox):
                             color: cornsilk;
                             font-family : 'Lato';
                             padding: 3px 3px 3px 10px;
-                            background-color: rgba(27, 4, 124, 0.7);
+                            background-color: rgba(0, 67, 206, 0.8);
                             margin-right : 10%;
         }
         .transpilation-step .analysis {
                         color: cornsilk;
                         padding: 3px 3px 3px 10px;
                         font-family : 'Lato';
-                        background-color: rgba(180, 77, 224, 0.7);
+                        background-color: rgba(180, 77, 224, 0.8);
                         margin-right: 10%;
         }
 
@@ -1116,7 +1116,7 @@ class TimelineView(widgets.VBox):
             color: cornsilk;
             padding: 10px 15px 10px 15px;
             font-size: 1.3em;
-            background-color: rgba(27, 4, 124, 0.7);
+            background-color: rgba(0, 67, 206, 0.8);
         }
 
         .analyse-label {
@@ -1124,7 +1124,7 @@ class TimelineView(widgets.VBox):
             padding: 10px 15px 10px 15px;
             color: cornsilk;
             font-size: 1.3em;
-            background-color: rgba(180, 77, 224, 0.7);
+            background-color: rgba(180, 77, 224, 0.8);
         }
 
         .label-text{
