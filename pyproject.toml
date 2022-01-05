@@ -1,5 +1,7 @@
 [build-system]
 requires = [
+    "setuptools>=42",
+    "wheel",
     "ipython>=7.30.1",
     "ipywidgets>=7.6.3",
     "numpy>=1.20.2",
