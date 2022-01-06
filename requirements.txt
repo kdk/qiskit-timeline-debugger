@@ -1,0 +1,8 @@
+ipython>=7.31.0
+ipywidgets>=7.6.3
+numpy>=1.20.2
+qiskit>=0.34.1
+qiskit_aer>=0.9.1
+matplotlib>=3.3
+jupyter 
+pylatexenc>=1.4
