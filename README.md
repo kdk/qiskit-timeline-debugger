@@ -10,7 +10,7 @@ This repository presents a debugger for the **qiskit transpiler** in the form of
 To install the debugger using pip (a python package manager), use - 
 
 ```bash
-pip install -i https://test.pypi.org/simple/ qiskit-trebugger
+pip install -i https://test.pypi.org/simple/ --extra-index https://pypi.org/simple/ qiskit-trebugger
 ``` 
 
 - PIP will handle the dependencies required for the package automatically and would install the latest version. 

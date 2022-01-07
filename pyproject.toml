@@ -1,11 +1,3 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel",
-    "ipython>=7.30.1",
-    "ipywidgets>=7.6.3",
-    "numpy>=1.20.2",
-    "qiskit>=0.33.1",
-    "qiskit_aer>=0.9.1"
-]
+requires = ["setuptools>=42","wheel"]
 build-backend = "setuptools.build_meta" 
