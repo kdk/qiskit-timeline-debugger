@@ -7,13 +7,22 @@ This repository presents a debugger for the **qiskit transpiler** in the form of
 <img src = 'https://user-images.githubusercontent.com/57539040/145200175-8b277d91-22eb-40c9-bbbd-c6e0ac2de4e1.gif' width = '90%' height = '44%'>
 
 ## Installation
-To install the debugger using pip (a python package manager), use - 
+1. To install the debugger using pip (a python package manager), use - 
 
 ```bash
-pip install qiskit-trebugger
+pip install -i https://test.pypi.org/simple/ --extra-index https://pypi.org/simple/ qiskit-trebugger
 ``` 
+- PIP will handle the dependencies required for the package automatically and would install the latest version. 
+- Currently the project is hosted as a test package and would be hosted on the real index when *tests* are added.
 
-PIP will handle the dependencies required for the package automatically and would install the latest version.
+
+2. To directly install via github follow the steps below after using `git clone`: 
+ ```bash
+ git clone https://github.com/TheGupta2012/qiskit-timeline-debugger.git
+ ```
+  - Make sure `python3` and `pip` are installed in your system
+  - Use `pip install -r requirements` to install the debugger dependencies
+  - Note : with this method, you can only use the debugger in the installed directory
 
 ## Usage Instructions
 

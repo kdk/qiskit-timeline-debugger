@@ -1,5 +1,5 @@
 from numpy import disp
-from qiskit.converters import dag_to_circuit
+from qiskit.converters import dag_to_circuit, circuit_to_dag
 from qiskit.dagcircuit import DAGCircuit
 
 from collections import defaultdict
@@ -930,12 +930,21 @@ class TimelineView(widgets.VBox):
         else:
             idx = step.index
             # Due to a bug in DAGCircuit.__eq__, we can not use ``step.dag != None``
-            while not isinstance(
-                self.transpilation_sequence.steps[idx].dag, DAGCircuit
+
+            found_transform = False
+            while (
+                not isinstance(self.transpilation_sequence.steps[idx].dag, DAGCircuit)
+                and idx > 0
             ):
                 idx = idx - 1
-                if idx < 0:
-                    return None
+                if idx >= 0:
+                    found_transform = (
+                        self.transpilation_sequence.steps[idx].type
+                        == PassType.TRANSFORMATION
+                    )
+
+            if found_transform == False:
+                return circuit_to_dag(self.transpilation_sequence.original_circuit)
 
             return self.transpilation_sequence.steps[idx].dag
 
@@ -1010,14 +1019,14 @@ class TimelineView(widgets.VBox):
                             color: cornsilk;
                             font-family : 'Lato';
                             padding: 3px 3px 3px 10px;
-                            background-color: rgba(27, 4, 124, 0.7);
+                            background-color: rgba(0, 67, 206, 0.8);
                             margin-right : 10%;
         }
         .transpilation-step .analysis {
                         color: cornsilk;
                         padding: 3px 3px 3px 10px;
                         font-family : 'Lato';
-                        background-color: rgba(180, 77, 224, 0.7);
+                        background-color: rgba(180, 77, 224, 0.8);
                         margin-right: 10%;
         }
 
@@ -1107,7 +1116,7 @@ class TimelineView(widgets.VBox):
             color: cornsilk;
             padding: 10px 15px 10px 15px;
             font-size: 1.3em;
-            background-color: rgba(27, 4, 124, 0.7);
+            background-color: rgba(0, 67, 206, 0.8);
         }
 
         .analyse-label {
@@ -1115,7 +1124,7 @@ class TimelineView(widgets.VBox):
             padding: 10px 15px 10px 15px;
             color: cornsilk;
             font-size: 1.3em;
-            background-color: rgba(180, 77, 224, 0.7);
+            background-color: rgba(180, 77, 224, 0.8);
         }
 
         .label-text{
